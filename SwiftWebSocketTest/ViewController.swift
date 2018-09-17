@@ -8,73 +8,58 @@
 
 import UIKit
 import SwiftWebSocket
-import SocketRocket
 
 class ViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var connectButton: UIButton!
+    @IBOutlet weak var disconnectButton: UIButton!
+    @IBOutlet weak var sendButton: UIButton!
     
-    var messageNum: Int = 0
+    var reconnect: Bool = false
     
     var webSocket: WebSocket!
-    var rocket: SRWebSocket!
+    
+    var kgWebSocket: KGWebSocket!
+    var factory: KGWebSocketFactory!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        initWebSocket()
-//        initSocketRocket()
-    }
-    
-    fileprivate func initSocketRocket() {
-        rocket = SRWebSocket(url: URL(string: "wss://echo.websocket.org"))
-        rocket.delegate = self
-    }
-    
-    fileprivate func initWebSocket() {
-        webSocket = WebSocket("wss://echo.websocket.org")
+//        initWebSocket()
         
-        webSocket.event.open = {
-            self.socketOpened()
-        }
-        webSocket.event.close = { code, reason, clean in
-            self.socketClosed()
-        }
-        webSocket.event.error = { error in
-            self.socketError(error)
-        }
-        webSocket.event.message = { message in
-            self.socketRecieved(message)
+        NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: Notification.Name.UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appEnterToForceground), name: Notification.Name.UIApplicationWillEnterForeground, object: nil)
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func appMovedToBackground() {
+        print("App moved to background!")
+        if kgWebSocket != nil, kgWebSocket.readyState() == KGReadyState_OPEN {
+            kgWebSocket.close()
+            reconnect = true
+        } else {
+            reconnect = false
         }
     }
     
-    fileprivate func socketRecieved(_ message: Any) {
-        if let recvText = message as? String {
-            print("recv: \(recvText)")
-            if let text = self.textView.text {
-                self.textView.text = text + "\n" + recvText
+    @objc func appEnterToForceground() {
+        print("App Enter To Forceground!")
+        
+        if kgWebSocket != nil, kgWebSocket.readyState() == KGReadyState_OPEN {
+            updateUIcomponents(isConnected: true)
+        } else {
+            if reconnect {
+                createAndEstablishWebSocketConnection()
             }
         }
     }
     
-    fileprivate func socketOpened() {
-        print("Opened")
-        if let text = self.textView.text {
-            self.textView.text = text + "\nOpened"
-        }
-    }
-    
-    fileprivate func socketClosed() {
-        print("Close")
-        if let text = self.textView.text {
-            self.textView.text = text + "\nClosed"
-        }
-    }
-    
-    fileprivate func socketError(_ error: Error) {
-        print("error \(error.localizedDescription)")
-        if let text = self.textView.text {
-            self.textView.text = text + "\nError"
-        }
+    fileprivate func updateUIcomponents(isConnected: Bool) {
+        self.disconnectButton.isEnabled = isConnected
+        self.sendButton.isEnabled = isConnected
+        self.connectButton.isEnabled = !isConnected
     }
 
     override func didReceiveMemoryWarning() {
@@ -83,43 +68,103 @@ class ViewController: UIViewController {
     }
     
     @IBAction func connect(_ sender: UIButton) {
-        webSocket.open()
-//        rocket.open()
+//        webSocket.open()
+        DispatchQueue.main.async {
+            self.createAndEstablishWebSocketConnection()
+        }
     }
     
     @IBAction func disconnect(_ sender: UIButton) {
-        webSocket.close()
-//        rocket.close()
+//        webSocket.close()
+        kgWebSocket.close()
+    }
+    
+    @IBAction func clear(_ sender: UIButton) {
+        textView.text = ""
     }
     
     @IBAction func send(_ sender: UIButton) {
         let msg = Date().debugDescription
-        print("send: \(msg)")
-        webSocket.send(msg)
-//        rocket.send(msg)
+        updateTextView(with: "SEND MESSAGE: [\(msg)]")
+//        webSocket.send(msg)
+        
+        guard let socket = self.kgWebSocket, socket.readyState() == KGReadyState_OPEN else { return }
+        
+        DispatchQueue.global(qos: .default).async(execute: {
+            socket.send(msg)
+        })
     }
 }
 
-extension ViewController: SRWebSocketDelegate {
-    
-    func webSocketDidOpen(_ webSocket: SRWebSocket!) {
-        print(webSocket.url)
-        socketOpened()
-    }
-    
-    func webSocket(_ webSocket: SRWebSocket!, didCloseWithCode code: Int, reason: String!, wasClean: Bool) {
-        socketClosed()
-    }
-    
-    func webSocket(_ webSocket: SRWebSocket!, didFailWithError error: Error!) {
-        socketError(error)
-    }
-    
-    func webSocket(_ webSocket: SRWebSocket!, didReceiveMessage message: Any!) {
-        socketRecieved(message)
-    }
-    
-    func webSocket(_ webSocket: SRWebSocket!, didReceivePong pongPayload: Data!) {
+extension ViewController {
+    fileprivate func createAndEstablishWebSocketConnection(url: String = "ws://echo.websocket.org") {
+        factory = KGWebSocketFactory.create()
+        guard let challengeHandler = createBasicChallengeHandler() else { return }
+        factory.setDefaultChallengeHandler(challengeHandler)
+        kgWebSocket = factory.createWebSocket(URL(string: url))
         
+        updateTextView(with: "CONNECTING")
+        setupKGWebSocketListeners()
+        kgWebSocket.connect()
+    }
+    
+    fileprivate func createBasicChallengeHandler() -> KGChallengeHandler? {
+        let loginHandler = KGDemoLoginHandler()
+        guard let challengeHandler = KGBasicChallengeHandler.create() as? KGBasicChallengeHandler else { return nil }
+        challengeHandler.setLogin(loginHandler)
+        return challengeHandler
+    }
+    
+    fileprivate func setupKGWebSocketListeners() {
+        kgWebSocket.didOpen = { webSocket in
+            DispatchQueue.main.async {
+                self.updateTextView(with: "CONNECTED")
+                self.updateUIcomponents(isConnected: true)
+            }
+        }
+        
+        kgWebSocket.didReceiveMessage = { (webSocket, data) in
+            DispatchQueue.main.async {
+                self.updateTextView(with: "RECEIVED MESSAGE: [\(data!)]")
+            }
+        }
+        
+        kgWebSocket.didReceiveError = { (webSocket, error) in
+            DispatchQueue.main.async {
+                self.updateTextView(with: error!.localizedDescription)
+            }
+        }
+        
+        kgWebSocket.didClose = { (websocket, code, reason, wasClean) in
+            DispatchQueue.main.async {
+                self.updateTextView(with: "CLOSED \(code): REASON: \(reason ?? "")")
+                self.updateUIcomponents(isConnected: false)
+            }
+        }
+    }
+    
+    fileprivate func initWebSocket() {
+        webSocket = WebSocket("wss://echo.websocket.org")
+        
+        webSocket.event.open = {
+            self.updateTextView(with: "OPENED")
+        }
+        webSocket.event.close = { code, reason, clean in
+            self.updateTextView(with: "CLOSED")
+        }
+        webSocket.event.error = { error in
+            self.updateTextView(with: error.localizedDescription)
+        }
+        webSocket.event.message = { message in
+            self.updateTextView(with: "RECEIVED MESSAGE: \(message)")
+        }
+    }
+}
+
+extension ViewController {
+    func updateTextView(with str: String) {
+        if let text = self.textView.text {
+            self.textView.text = text + "\n" + str
+        }
     }
 }

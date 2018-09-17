@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3A0E9E77AF62B735B4063B8B5320921A"
+               BlueprintIdentifier = "6175F806BD92013E574EB156D67F4E6E"
                BuildableName = "Pods_SwiftWebSocketTest.framework"
                BlueprintName = "Pods-SwiftWebSocketTest"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3A0E9E77AF62B735B4063B8B5320921A"
+            BlueprintIdentifier = "6175F806BD92013E574EB156D67F4E6E"
             BuildableName = "Pods_SwiftWebSocketTest.framework"
             BlueprintName = "Pods-SwiftWebSocketTest"
             ReferencedContainer = "container:Pods.xcodeproj">
