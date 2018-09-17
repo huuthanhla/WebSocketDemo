@@ -85,7 +85,7 @@ class ViewController: UIViewController {
     
     @IBAction func send(_ sender: UIButton) {
         let msg = Date().debugDescription
-        updateTextView(with: "SEND MESSAGE: [\(msg)]")
+        updateTextView(with: "SEND: [\(msg)]")
 //        webSocket.send(msg)
         
         guard let socket = self.kgWebSocket, socket.readyState() == KGReadyState_OPEN else { return }
@@ -125,7 +125,7 @@ extension ViewController {
         
         kgWebSocket.didReceiveMessage = { (webSocket, data) in
             DispatchQueue.main.async {
-                self.updateTextView(with: "RECEIVED MESSAGE: [\(data!)]")
+                self.updateTextView(with: "RECEIVED: [\(data!)]")
             }
         }
         
@@ -156,7 +156,7 @@ extension ViewController {
             self.updateTextView(with: error.localizedDescription)
         }
         webSocket.event.message = { message in
-            self.updateTextView(with: "RECEIVED MESSAGE: \(message)")
+            self.updateTextView(with: "RECEIVED: \(message)")
         }
     }
 }

@@ -49,8 +49,8 @@
                                     <constraint firstAttribute="height" constant="44" id="p1Y-0W-8OQ"/>
                                 </constraints>
                             </stackView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="MZJ-N9-Km9">
-                                <rect key="frame" x="58" y="123" width="260" height="442"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="MZJ-N9-Km9">
+                                <rect key="frame" x="16" y="123" width="343" height="442"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -68,7 +68,7 @@
                                     <action selector="send:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xfp-JG-AHc"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nAi-0c-SYB">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nAi-0c-SYB">
                                 <rect key="frame" x="202.5" y="580" width="115" height="44"/>
                                 <color key="backgroundColor" red="1" green="0.4431372549" blue="0.49803921569999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -87,13 +87,14 @@
                             <constraint firstItem="nAi-0c-SYB" firstAttribute="width" secondItem="fdC-JS-qmI" secondAttribute="width" id="37S-AM-xmf"/>
                             <constraint firstItem="q1S-Um-N2G" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="44" id="8vI-H3-Mb3"/>
                             <constraint firstItem="MZJ-N9-Km9" firstAttribute="top" secondItem="q1S-Um-N2G" secondAttribute="bottom" constant="15" id="NEg-ue-HKR"/>
+                            <constraint firstAttribute="trailing" secondItem="nAi-0c-SYB" secondAttribute="trailing" constant="57.5" id="ccx-mH-lkX"/>
                             <constraint firstItem="fdC-JS-qmI" firstAttribute="width" secondItem="xaa-l5-LQ4" secondAttribute="width" id="fft-8G-dDe"/>
-                            <constraint firstItem="MZJ-N9-Km9" firstAttribute="trailing" secondItem="q1S-Um-N2G" secondAttribute="trailing" id="jhh-P6-xML"/>
+                            <constraint firstItem="MZJ-N9-Km9" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" constant="-16" id="jhh-P6-xML"/>
                             <constraint firstItem="MZJ-N9-Km9" firstAttribute="bottom" secondItem="fdC-JS-qmI" secondAttribute="top" constant="-15" id="kJ8-Sf-vi4"/>
-                            <constraint firstItem="nAi-0c-SYB" firstAttribute="leading" secondItem="fdC-JS-qmI" secondAttribute="trailing" constant="30" id="mvS-rt-dyl"/>
+                            <constraint firstItem="nAi-0c-SYB" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fdC-JS-qmI" secondAttribute="trailing" constant="8" symbolic="YES" id="mvS-rt-dyl"/>
                             <constraint firstItem="fdC-JS-qmI" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="centerX" constant="-15" id="qMc-hN-D6v"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="fdC-JS-qmI" secondAttribute="bottom" constant="43" id="qur-gV-Ydm"/>
-                            <constraint firstItem="MZJ-N9-Km9" firstAttribute="leading" secondItem="q1S-Um-N2G" secondAttribute="leading" id="rf7-eH-kxz"/>
+                            <constraint firstItem="MZJ-N9-Km9" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="rf7-eH-kxz"/>
                             <constraint firstItem="nAi-0c-SYB" firstAttribute="top" secondItem="fdC-JS-qmI" secondAttribute="top" id="rj9-zo-GTb"/>
                             <constraint firstItem="q1S-Um-N2G" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="v18-7F-j51"/>
                             <constraint firstItem="fdC-JS-qmI" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="zVz-eO-MUW"/>
