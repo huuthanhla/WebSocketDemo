@@ -8,44 +8,72 @@
 
 import UIKit
 import SwiftWebSocket
+import SocketRocket
 
 class ViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     
     var messageNum: Int = 0
     
-    var ws: WebSocket!
+    var webSocket: WebSocket!
+    var rocket: SRWebSocket!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        ws = WebSocket("wss://echo.websocket.org")
+        initWebSocket()
+//        initSocketRocket()
+    }
+    
+    fileprivate func initSocketRocket() {
+        rocket = SRWebSocket(url: URL(string: "wss://echo.websocket.org"))
+        rocket.delegate = self
+    }
+    
+    fileprivate func initWebSocket() {
+        webSocket = WebSocket("wss://echo.websocket.org")
         
-        ws.event.open = {
-            print("opened")
+        webSocket.event.open = {
+            self.socketOpened()
+        }
+        webSocket.event.close = { code, reason, clean in
+            self.socketClosed()
+        }
+        webSocket.event.error = { error in
+            self.socketError(error)
+        }
+        webSocket.event.message = { message in
+            self.socketRecieved(message)
+        }
+    }
+    
+    fileprivate func socketRecieved(_ message: Any) {
+        if let recvText = message as? String {
+            print("recv: \(recvText)")
             if let text = self.textView.text {
-                self.textView.text = text + "\nOpened"
+                self.textView.text = text + "\n" + recvText
             }
         }
-        ws.event.close = { code, reason, clean in
-            print("close")
-            if let text = self.textView.text {
-                self.textView.text = text + "\nClosed"
-            }
+    }
+    
+    fileprivate func socketOpened() {
+        print("Opened")
+        if let text = self.textView.text {
+            self.textView.text = text + "\nOpened"
         }
-        ws.event.error = { error in
-            print("error \(error)")
-            if let text = self.textView.text {
-                self.textView.text = text + "\nError"
-            }
+    }
+    
+    fileprivate func socketClosed() {
+        print("Close")
+        if let text = self.textView.text {
+            self.textView.text = text + "\nClosed"
         }
-        ws.event.message = { message in
-            if let recvText = message as? String {
-                print("recv: \(recvText)")
-                if let text = self.textView.text {
-                    self.textView.text = text + "\n" + recvText
-                }
-            }
+    }
+    
+    fileprivate func socketError(_ error: Error) {
+        print("error \(error.localizedDescription)")
+        if let text = self.textView.text {
+            self.textView.text = text + "\nError"
         }
     }
 
@@ -55,17 +83,43 @@ class ViewController: UIViewController {
     }
     
     @IBAction func connect(_ sender: UIButton) {
-        ws.open()
+        webSocket.open()
+//        rocket.open()
     }
     
     @IBAction func disconnect(_ sender: UIButton) {
-        ws.close()
+        webSocket.close()
+//        rocket.close()
     }
     
     @IBAction func send(_ sender: UIButton) {
         let msg = Date().debugDescription
         print("send: \(msg)")
-        ws.send(msg)
+        webSocket.send(msg)
+//        rocket.send(msg)
     }
 }
 
+extension ViewController: SRWebSocketDelegate {
+    
+    func webSocketDidOpen(_ webSocket: SRWebSocket!) {
+        print(webSocket.url)
+        socketOpened()
+    }
+    
+    func webSocket(_ webSocket: SRWebSocket!, didCloseWithCode code: Int, reason: String!, wasClean: Bool) {
+        socketClosed()
+    }
+    
+    func webSocket(_ webSocket: SRWebSocket!, didFailWithError error: Error!) {
+        socketError(error)
+    }
+    
+    func webSocket(_ webSocket: SRWebSocket!, didReceiveMessage message: Any!) {
+        socketRecieved(message)
+    }
+    
+    func webSocket(_ webSocket: SRWebSocket!, didReceivePong pongPayload: Data!) {
+        
+    }
+}

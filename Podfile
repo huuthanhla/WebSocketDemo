@@ -7,5 +7,5 @@ target 'SwiftWebSocketTest' do
 
   # Pods for SwiftWebSocketTest
   pod 'SwiftWebSocket'
-
+  pod 'SocketRocket'
 end
