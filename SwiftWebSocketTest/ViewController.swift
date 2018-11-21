@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var connectButton: UIButton!
     @IBOutlet weak var disconnectButton: UIButton!
     @IBOutlet weak var sendButton: UIButton!
+    @IBOutlet weak var socketUrlLabel: UITextField!
     
     var reconnect: Bool = false
     
@@ -32,6 +33,24 @@ class ViewController: UIViewController {
     }
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    fileprivate func initWebSocket() {
+        webSocket = WebSocket("ws://210.245.11.167:1080")
+        
+        webSocket.event.open = {
+            self.updateTextView(with: "OPENED")
+            self.updateUIcomponents(isConnected: true)
+        }
+        webSocket.event.close = { code, reason, clean in
+            self.updateTextView(with: "CLOSED")
+        }
+        webSocket.event.error = { error in
+            self.updateTextView(with: error.localizedDescription)
+        }
+        webSocket.event.message = { message in
+            self.updateTextView(with: "RECEIVED: \(message)")
+        }
     }
     
     @objc func appMovedToBackground() {
@@ -61,22 +80,32 @@ class ViewController: UIViewController {
         self.sendButton.isEnabled = isConnected
         self.connectButton.isEnabled = !isConnected
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     @IBAction func connect(_ sender: UIButton) {
 //        webSocket.open()
+        
+        hideKeyboard()
+        guard let socketUrl = socketUrlLabel.text, socketUrl.count > 0 else { return }
+
         DispatchQueue.main.async {
-            self.createAndEstablishWebSocketConnection()
+            self.createAndEstablishWebSocketConnection(url: socketUrl)
         }
     }
     
     @IBAction func disconnect(_ sender: UIButton) {
 //        webSocket.close()
+        hideKeyboard()
         kgWebSocket.close()
+    }
+    
+    @IBAction func demoAction(_ sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        
+        if sender.isSelected {
+            socketUrlLabel.text = "ws://210.245.11.167:1080"
+        } else {
+            socketUrlLabel.text = "ws://echo.websocket.org"
+        }
     }
     
     @IBAction func clear(_ sender: UIButton) {
@@ -89,10 +118,14 @@ class ViewController: UIViewController {
 //        webSocket.send(msg)
         
         guard let socket = self.kgWebSocket, socket.readyState() == KGReadyState_OPEN else { return }
-        
+
         DispatchQueue.global(qos: .default).async(execute: {
             socket.send(msg)
         })
+    }
+    
+    fileprivate func hideKeyboard() {
+        view.endEditing(true)
     }
 }
 
@@ -131,7 +164,10 @@ extension ViewController {
         
         kgWebSocket.didReceiveError = { (webSocket, error) in
             DispatchQueue.main.async {
-                self.updateTextView(with: error!.localizedDescription)
+                if let error = error {
+                    self.updateTextView(with: error.localizedDescription)
+                    print(error.localizedDescription)
+                }
             }
         }
         
@@ -142,29 +178,14 @@ extension ViewController {
             }
         }
     }
-    
-    fileprivate func initWebSocket() {
-        webSocket = WebSocket("wss://echo.websocket.org")
-        
-        webSocket.event.open = {
-            self.updateTextView(with: "OPENED")
-        }
-        webSocket.event.close = { code, reason, clean in
-            self.updateTextView(with: "CLOSED")
-        }
-        webSocket.event.error = { error in
-            self.updateTextView(with: error.localizedDescription)
-        }
-        webSocket.event.message = { message in
-            self.updateTextView(with: "RECEIVED: \(message)")
-        }
-    }
 }
 
 extension ViewController {
     func updateTextView(with str: String) {
-        if let text = self.textView.text {
-            self.textView.text = text + "\n" + str
+        DispatchQueue.main.async {
+            if let text = self.textView.text {
+                self.textView.text = text + "\n" + str
+            }
         }
     }
 }

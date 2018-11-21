@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "00FB8A0F79BE152EE7B10692BDA6B218"
-               BuildableName = "Pods_SwiftWebSocketTest.framework"
-               BlueprintName = "Pods-SwiftWebSocketTest"
+               BlueprintIdentifier = "6FF77DB40135AE96F4AFB4D560FF94C4"
+               BuildableName = "SocketIO.framework"
+               BlueprintName = "Socket.IO-Client-Swift"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "00FB8A0F79BE152EE7B10692BDA6B218"
-            BuildableName = "Pods_SwiftWebSocketTest.framework"
-            BlueprintName = "Pods-SwiftWebSocketTest"
+            BlueprintIdentifier = "6FF77DB40135AE96F4AFB4D560FF94C4"
+            BuildableName = "SocketIO.framework"
+            BlueprintName = "Socket.IO-Client-Swift"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

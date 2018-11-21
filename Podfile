@@ -7,4 +7,5 @@ target 'SwiftWebSocketTest' do
 
   # Pods for SwiftWebSocketTest
   pod 'SwiftWebSocket'
+  pod 'Socket.IO-Client-Swift', '~> 13.3.0'
 end

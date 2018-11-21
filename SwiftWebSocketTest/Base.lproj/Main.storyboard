@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,11 +18,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="q1S-Um-N2G">
-                                <rect key="frame" x="58" y="64" width="260" height="44"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="q1S-Um-N2G">
+                                <rect key="frame" x="37.5" y="64" width="300" height="44"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xaa-l5-LQ4">
-                                        <rect key="frame" x="0.0" y="0.0" width="115" height="44"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="44"/>
                                         <color key="backgroundColor" red="0.0" green="0.63921568630000003" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Connect">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -32,8 +31,19 @@
                                             <action selector="connect:" destination="BYZ-38-t0r" eventType="touchUpInside" id="OYV-Tn-109"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Ms-lS-bng">
+                                        <rect key="frame" x="110" y="0.0" width="80" height="44"/>
+                                        <color key="backgroundColor" red="1" green="0.98431372549999996" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="80" id="Z0Z-uP-lJk"/>
+                                        </constraints>
+                                        <state key="normal" title="DemoWS"/>
+                                        <connections>
+                                            <action selector="demoAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BfB-ZV-MwT"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NMc-Ba-m5t">
-                                        <rect key="frame" x="145" y="0.0" width="115" height="44"/>
+                                        <rect key="frame" x="200" y="0.0" width="100" height="44"/>
                                         <color key="backgroundColor" red="1" green="0.57810515169999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Disconect">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -45,18 +55,24 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="NMc-Ba-m5t" firstAttribute="width" secondItem="xaa-l5-LQ4" secondAttribute="width" id="6OO-6t-XnI"/>
-                                    <constraint firstAttribute="width" constant="260" id="Vg9-6z-doZ"/>
+                                    <constraint firstAttribute="width" constant="300" id="Vg9-6z-doZ"/>
                                     <constraint firstAttribute="height" constant="44" id="p1Y-0W-8OQ"/>
                                 </constraints>
                             </stackView>
+                            <textField opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="ws://echo.websocket.org" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="o5g-b5-aSY" userLabel="SocketUrl">
+                                <rect key="frame" x="40" y="118" width="295" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="MZJ-N9-Km9">
-                                <rect key="frame" x="16" y="123" width="343" height="442"/>
+                                <rect key="frame" x="16" y="158" width="343" height="407"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fdC-JS-qmI">
-                                <rect key="frame" x="57.5" y="580" width="115" height="44"/>
+                                <rect key="frame" x="72.5" y="580" width="100" height="44"/>
                                 <color key="backgroundColor" red="0.30840110780000002" green="0.5618229508" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="dyJ-ox-O4V"/>
@@ -69,7 +85,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nAi-0c-SYB">
-                                <rect key="frame" x="202.5" y="580" width="115" height="44"/>
+                                <rect key="frame" x="217.5" y="580" width="100" height="44"/>
                                 <color key="backgroundColor" red="1" green="0.4431372549" blue="0.49803921569999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="y9B-2d-EkL"/>
@@ -86,8 +102,11 @@
                         <constraints>
                             <constraint firstItem="nAi-0c-SYB" firstAttribute="width" secondItem="fdC-JS-qmI" secondAttribute="width" id="37S-AM-xmf"/>
                             <constraint firstItem="q1S-Um-N2G" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="44" id="8vI-H3-Mb3"/>
-                            <constraint firstItem="MZJ-N9-Km9" firstAttribute="top" secondItem="q1S-Um-N2G" secondAttribute="bottom" constant="15" id="NEg-ue-HKR"/>
+                            <constraint firstItem="MZJ-N9-Km9" firstAttribute="top" secondItem="o5g-b5-aSY" secondAttribute="bottom" constant="10" id="NEg-ue-HKR"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="o5g-b5-aSY" secondAttribute="trailing" constant="40" id="Wrc-rC-4vJ"/>
                             <constraint firstAttribute="trailing" secondItem="nAi-0c-SYB" secondAttribute="trailing" constant="57.5" id="ccx-mH-lkX"/>
+                            <constraint firstItem="o5g-b5-aSY" firstAttribute="top" secondItem="q1S-Um-N2G" secondAttribute="bottom" constant="10" id="dAO-qH-Roh"/>
+                            <constraint firstItem="o5g-b5-aSY" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="f8z-l2-p28"/>
                             <constraint firstItem="fdC-JS-qmI" firstAttribute="width" secondItem="xaa-l5-LQ4" secondAttribute="width" id="fft-8G-dDe"/>
                             <constraint firstItem="MZJ-N9-Km9" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" constant="-16" id="jhh-P6-xML"/>
                             <constraint firstItem="MZJ-N9-Km9" firstAttribute="bottom" secondItem="fdC-JS-qmI" secondAttribute="top" constant="-15" id="kJ8-Sf-vi4"/>
@@ -105,6 +124,7 @@
                         <outlet property="connectButton" destination="xaa-l5-LQ4" id="DZf-R9-lTk"/>
                         <outlet property="disconnectButton" destination="NMc-Ba-m5t" id="lsE-Ub-qZg"/>
                         <outlet property="sendButton" destination="fdC-JS-qmI" id="VHT-H4-wax"/>
+                        <outlet property="socketUrlLabel" destination="o5g-b5-aSY" id="bdg-mP-NOU"/>
                         <outlet property="textView" destination="MZJ-N9-Km9" id="wrc-aa-ngd"/>
                     </connections>
                 </viewController>
